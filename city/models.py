@@ -1,8 +1,5 @@
-from sqlalchemy import (
-    Column,
-    Integer,
-    String
-)
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 
 from database import Base
 
@@ -13,3 +10,8 @@ class City(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(255), unique=True, index=True)
     additional_info = Column(String(255), nullable=True)
+    temperatures = relationship(
+        "Temperature",
+        back_populates="city",
+        cascade="all, delete-orphan"
+    )
