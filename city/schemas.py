@@ -1,9 +1,4 @@
-from pydantic import (
-    BaseModel,
-    conint,
-    ValidationError,
-    field_validator
-    )
+from pydantic import BaseModel, conint, ValidationError, field_validator
 
 
 class City(BaseModel):

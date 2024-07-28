@@ -20,25 +20,19 @@ async def get_city_by_id(city_id: int, db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/cities/", response_model=schemas.City)
-async def create_city(
-        city: schemas.CityIn,
-        db: AsyncSession = Depends(get_db)
-):
+async def create_city(city: schemas.CityIn, db: AsyncSession = Depends(get_db)):
     return await crud.create_city(db=db, city=city)
 
 
-@router.delete("/city/{city_id}/")
-async def delete_city_by_id(
-        city_id: int,
-        db: AsyncSession = Depends(get_db)
-):
+@router.delete("/city/{city_id}/", response_model=dict)
+async def delete_city_by_id(city_id: int, db: AsyncSession = Depends(get_db)):
     return await crud.delete_city_by_id(city_id=city_id, db=db)
 
 
-@router.get("/city/bulk_create/")
-async def city_bulk_create(db: AsyncSession = Depends(get_db)):
-    try:
-        await crud.bulk_add_cities(db)
-    except BaseException as e:
-        return {"Failed": "to create!"}
-    return {"Successfully": "Created!"}
+# @router.get("/city/bulk_create/")
+# async def city_bulk_create(db: AsyncSession = Depends(get_db)):
+#     try:
+#         await crud.bulk_add_cities(db)
+#     except BaseException as e:
+#         return {"Failed": "to create!"}
+#     return {"Successfully": "Created!"}
