@@ -1,11 +1,38 @@
 from datetime import datetime
 import httpx
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
 from temperature.models import Temperature as TemperatureModel
-from temperature.schemas import Temperature as TemperatureSchema, TemperatureIn
+from temperature.schemas import Temperature, TemperatureOut, TemperatureIn
 from city import crud as city_crud
+from city.models import City as CityModel
 from settings import Settings
+
+
+async def get_all_temperature_data(db: AsyncSession):
+    query = select(TemperatureModel)
+    result = await db.execute(query)
+    temperature_list = result.scalars().all()
+    return [
+        Temperature.from_orm(temperature)
+        for temperature in temperature_list
+    ]
+
+
+async def get_temperature_data_by_city_id(db: AsyncSession, city_id: int):
+    query = (
+        select(CityModel.name.label("city"), TemperatureModel.temperature, TemperatureModel.date_time)
+        .filter(CityModel.id == city_id)
+        .join(TemperatureModel, TemperatureModel.city_id == CityModel.id)
+        .order_by(TemperatureModel.date_time.asc())
+    )
+    result = await db.execute(query)
+    temperature_list = result.all()
+    return [
+        TemperatureOut(city=row.city, temperature=row.temperature, date_time=row.date_time)
+        for row in temperature_list
+    ]
 
 
 async def get_temperature_from_api(
@@ -51,7 +78,7 @@ async def create_record(
         await db.rollback()
         raise HTTPException(status_code=400, detail="Could not insert temperature data")
 
-    return TemperatureSchema.from_orm(temperature)
+    return Temperature.from_orm(temperature)
 
 
 async def add_new_records(db: AsyncSession, settings: Settings):

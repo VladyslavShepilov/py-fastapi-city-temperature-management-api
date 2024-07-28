@@ -9,7 +9,10 @@ async def get_all_cities(db: AsyncSession) -> list[schemas.City]:
     query = select(models.City)
     result = await db.execute(query)
     city_list = result.scalars().all()
-    return [schemas.City.from_orm(city) for city in city_list]
+    return [
+        schemas.City.from_orm(city)
+        for city in city_list
+    ]
 
 
 async def get_city_by_id(db: AsyncSession, city_id: int) -> schemas.City:

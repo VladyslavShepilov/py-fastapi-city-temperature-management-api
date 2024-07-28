@@ -12,6 +12,15 @@ class Temperature(BaseModel):
         from_attributes = True
 
 
+class TemperatureOut(BaseModel):
+    city: str
+    temperature: float
+    date_time: datetime
+
+    class Config:
+        from_attributes = True
+
+
 class TemperatureIn(BaseModel):
     temperature: float
     date_time: datetime = datetime.now()
