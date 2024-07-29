@@ -10,12 +10,12 @@ from temperature import crud, schemas
 router = APIRouter()
 
 
-@router.get("/temperatures/", response_model=list[schemas.Temperature])
+@router.get("/temperature/", response_model=list[schemas.Temperature])
 async def get_all_temperature_records(db: AsyncSession = Depends(get_db)):
     return await crud.get_all_temperature_data(db)
 
 
-@router.get("/temperatures/{city_id}/", response_model=list[schemas.TemperatureOut])
+@router.get("/temperature/{city_id}/", response_model=list[schemas.TemperatureOut])
 async def get_temperature_data_by_city_id(
     city_id: int, db: AsyncSession = Depends(get_db)
 ):
@@ -25,7 +25,7 @@ async def get_temperature_data_by_city_id(
     return temperatures
 
 
-@router.post("/temperatures/update/", response_model=list[schemas.Temperature])
+@router.post("/temperature/update/", response_model=list[schemas.Temperature])
 async def update_temperature_records(
     db: AsyncSession = Depends(get_db), settings: Settings = Depends(get_settings)
 ):

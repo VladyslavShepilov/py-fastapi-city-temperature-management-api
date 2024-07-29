@@ -53,25 +53,3 @@ async def delete_city_by_id(db: AsyncSession, city_id: int) -> dict[str]:
         raise HTTPException(status_code=404, detail="City not found")
 
     return {"detail": "City deleted successfully"}
-
-
-# Utility function to create records
-# async def bulk_add_cities(db: AsyncSession):
-#     cities_to_add = [
-#         {"name": "New York", "additional_info": "The Big Apple"},
-#         {"name": "Los Angeles", "additional_info": "City of Angels"},
-#         {"name": "Chicago", "additional_info": "The Windy City"},
-#         {"name": "Houston", "additional_info": "Space City"},
-#         {"name": "Phoenix", "additional_info": "Valley of the Sun"},
-#         {"name": "Philadelphia", "additional_info": "The City of Brotherly Love"},
-#         {"name": "San Antonio", "additional_info": "Remember the Alamo"},
-#         {"name": "San Diego", "additional_info": "America's Finest City"},
-#         {"name": "Dallas", "additional_info": "The Big D"},
-#         {"name": "San Jose", "additional_info": "Capital of Silicon Valley"},
-#     ]
-#     for city in cities_to_add:
-#         city_instance = models.City(
-#             name=city["name"], additional_info=city["additional_info"]
-#         )
-#         db.add(city_instance)
-#     await db.commit()
